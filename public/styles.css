@@ -11,11 +11,6 @@ p {
       max-width: 800px;
 }
 
-.article-card {
-    margin-bottom: 1.5rem;
-    padding: 1em;
-}
-
 .card-text small {
     color: #666; 
 }

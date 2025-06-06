@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const app = express();
 const Article = require('./models/Article');
 const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
 
+app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
@@ -89,6 +91,30 @@ app.post('/articles', async (req, res) => {
 
 app.get('/articles/new', (req, res) => {
   res.render('newArticle');
+});
+
+app.get('/articles/:id', async (req, res) => {
+  try {
+    const article = await Article.findById(req.params.id);
+    if (!article) {
+      return res.status(404).send('Статья не найдена');
+    }
+
+    res.render('articleDetails', { article });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Ошибка сервера');
+  }
+});
+
+app.delete('/articles/:id', async (req, res) => {
+  try {
+    await Article.findByIdAndDelete(req.params.id);
+    res.redirect('/articles');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Ошибка при удалении статьи');
+  }
 });
 
 const PORT = 3000;
