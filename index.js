@@ -2,9 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const Article = require('./models/Article');
+const bodyParser = require('body-parser');
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
-
 app.set('view engine', 'ejs');
 
 mongoose.connect('mongodb://localhost:27017/scientificJournal', {
@@ -58,6 +59,36 @@ app.get('/articles', async (req, res) => {
     console.error(err);
     res.status(500).send('Ошибка сервера');
   }
+});
+
+app.post('/articles', async (req, res) => {
+  const {
+    title,
+    authors,
+    datePublished,
+    content,
+    tags
+  } = req.body;
+
+  try {
+    const article = new Article({
+      title,
+      authors: authors.split(',').map(a => a.trim()).filter(Boolean),
+      datePublished: new Date(datePublished),
+      content,
+      tags: tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : []
+    });
+
+    await article.save();
+    res.redirect('/articles');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Ошибка при сохранении статьи');
+  }
+});
+
+app.get('/articles/new', (req, res) => {
+  res.render('newArticle');
 });
 
 const PORT = 3000;

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Добавить статью</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Научный Журнал</a>
+      <div class="ms-auto d-flex gap-2">
+        <a class="btn btn-outline-light" href="/articles">Список статей</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5 pt-4">
+    <h2 class="mb-4 fw-bold">Добавить новую статью</h2>
+
+    <form action="/articles" method="POST">
+      <div class="mb-3">
+        <label for="title" class="form-label">Название статьи</label>
+        <input type="text" name="title" id="title" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="authors" class="form-label">Авторы (через запятую)</label>
+        <input type="text" name="authors" id="authors" class="form-control" placeholder="Иванов И.И., Петров П.П." required>
+      </div>
+
+      <div class="mb-3">
+        <label for="datePublished" class="form-label">Дата публикации</label>
+        <input type="date" name="datePublished" id="datePublished" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="content" class="form-label">Содержание статьи</label>
+        <textarea name="content" id="content" class="form-control" rows="5" required></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label for="tags" class="form-label">Теги (через запятую)</label>
+        <input type="text" name="tags" id="tags" class="form-control" placeholder="медицина, AI, диагностика">
+      </div>
+
+      <button type="submit" class="btn btn-primary">Сохранить статью</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -18,6 +18,7 @@
   "homepage": "https://github.com/VladimirPolozov/DB_Lab009#readme",
   "description": "",
   "dependencies": {
+    "body-parser": "^2.2.0",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "mongoose": "^8.15.1"
