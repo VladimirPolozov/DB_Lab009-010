@@ -8,30 +8,56 @@
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">Научный Журнал</a>
-      <a class="btn btn-outline-light ms-auto" href="/">← Назад</a>
-    </div>
-  </nav>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Научный Журнал</a>
+            <div class="ms-auto d-flex gap-2">
+            <a class="btn btn-outline-light" href="/articles">Список статей</a>
+            <a class="btn btn-success" href="/articles/new">➕ Добавить статью</a>
+            </div>
+        </div>
+    </nav>
 
   <div class="container mt-5">
     <h2 class="mb-4 fw-bold">Список статей</h2>
 
-    <form action="/articles" method="GET" class="search-form mb-4 d-flex gap-2 flex-row">
-        <div class="input-group">
-            <% const currentSearch = typeof searchQuery !== 'undefined' ? searchQuery : '' %>
-            <input type="text" name="search" class="form-control" placeholder="Название статьи" value="<%= currentSearch %>">
-        </div>
-        <div class="input-group">
-            <select name="author" class="form-select">
+    <form action="/articles" method="GET" class="mb-4 d-flex gap-2 flex-column">
+        <div class="d-flex gap-2 flex-row">
+            <!-- Поиск по названию -->
+            <div class="input-group">
+                <% const currentSearch = typeof searchQuery !== 'undefined' ? searchQuery : '' %>
+                <input type="text" name="search" class="form-control" placeholder="Название статьи" value="<%= currentSearch %>">
+            </div>
+
+            <!-- Выбор автора -->
+            <div class="input-group">
+                <select name="author" class="form-select">
                 <option value="">Все авторы</option>
-                <% allAuthors.forEach(author => { %>
+                <% allAuthors.forEach(author => {   %>
                     <option value="<%= author %>" <%= (author === authorQuery) ? 'selected' : '' %>><%= author %></option>
                 <% }) %>
-            </select>
+                </select>
+            </div>
         </div>
-        <button class="btn btn-primary" type="submit">Поиск</button>
+        <div class="d-flex gap-2 flex-row">
+            <div class="d-flex gap-2 flex-row">
+                <!-- Фильтр по дате: от -->
+                <div class="input-group">
+                    <span class="input-group-text">От</span>
+                    <input type="date" name="dateFrom" class="form-control" value="<%= typeof dateFrom !== 'undefined' ? dateFrom : '' %>">
+                </div>
+
+                <!-- Фильтр по дате: до -->
+                <div class="input-group">
+                    <span class="input-group-text">До</span>
+                    <input type="date" name="dateTo" class="form-control" value="<%= typeof dateTo !== 'undefined' ? dateTo : '' %>">
+                </div>
+            </div>
+        
+            <div class="input-group">
+                <button class="input-group btn btn-primary" type="submit">Применить фильтр</button>
+            </div>
+        </div>
     </form>
 
     <% if (articles.length === 0) { %>

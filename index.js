@@ -18,18 +18,27 @@ app.get('/', (req, res) => {
 
 app.get('/articles', async (req, res) => {
   let query = {};
-  const searchQuery = req.query.search || '';
-  const authorQuery = req.query.author || '';
+  const { search, author, dateFrom, dateTo } = req.query;
 
-  // Поиск по названию статьи
-  if (searchQuery.trim() !== '') {
-    const regex = new RegExp(searchQuery.trim(), 'i');
+  // Поиск по названию
+  if (search?.trim()) {
+    const regex = new RegExp(search.trim(), 'i');
     query.title = regex;
   }
 
   // Поиск по автору
-  if (authorQuery.trim() !== '') {
-    query.authors = authorQuery.trim();
+  if (author?.trim()) {
+    query.authors = author.trim();
+  }
+
+  // Поиск по дате: от
+  if (dateFrom?.trim()) {
+    query.datePublished = { ...query.datePublished, $gte: new Date(dateFrom) };
+  }
+
+  // Поиск по дате: до
+  if (dateTo?.trim()) {
+    query.datePublished = { ...query.datePublished, $lte: new Date(dateTo) };
   }
 
   try {
@@ -38,12 +47,16 @@ app.get('/articles', async (req, res) => {
 
     res.render('articles', {
       articles,
-      searchQuery,
-      authorQuery,
+      searchQuery: search || '',
+      authorQuery: author || '',
+      dateFrom: dateFrom || '',
+      dateTo: dateTo || '',
       allAuthors
     });
+
   } catch (err) {
-    res.status(500).send(err);
+    console.error(err);
+    res.status(500).send('Ошибка сервера');
   }
 });
 
