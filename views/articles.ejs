@@ -18,12 +18,20 @@
   <div class="container mt-5">
     <h2 class="mb-4 fw-bold">Список статей</h2>
 
-    <form action="/articles" method="GET" class="mb-4">
+    <form action="/articles" method="GET" class="search-form mb-4 d-flex gap-2 flex-row">
         <div class="input-group">
             <% const currentSearch = typeof searchQuery !== 'undefined' ? searchQuery : '' %>
             <input type="text" name="search" class="form-control" placeholder="Название статьи" value="<%= currentSearch %>">
-            <button class="btn btn-primary" type="submit">Поиск</button>
         </div>
+        <div class="input-group">
+            <select name="author" class="form-select">
+                <option value="">Все авторы</option>
+                <% allAuthors.forEach(author => { %>
+                    <option value="<%= author %>" <%= (author === authorQuery) ? 'selected' : '' %>><%= author %></option>
+                <% }) %>
+            </select>
+        </div>
+        <button class="btn btn-primary" type="submit">Поиск</button>
     </form>
 
     <% if (articles.length === 0) { %>

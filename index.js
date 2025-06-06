@@ -19,15 +19,29 @@ app.get('/', (req, res) => {
 app.get('/articles', async (req, res) => {
   let query = {};
   const searchQuery = req.query.search || '';
+  const authorQuery = req.query.author || '';
 
+  // Поиск по названию статьи
   if (searchQuery.trim() !== '') {
     const regex = new RegExp(searchQuery.trim(), 'i');
     query.title = regex;
   }
 
+  // Поиск по автору
+  if (authorQuery.trim() !== '') {
+    query.authors = authorQuery.trim();
+  }
+
   try {
     const articles = await Article.find(query);
-    res.render('articles', { articles, searchQuery: searchQuery });
+    const allAuthors = await Article.distinct('authors');
+
+    res.render('articles', {
+      articles,
+      searchQuery,
+      authorQuery,
+      allAuthors
+    });
   } catch (err) {
     res.status(500).send(err);
   }
