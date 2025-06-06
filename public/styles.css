@@ -1,0 +1,25 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    padding-top: 4rem;
+}
+
+p {
+    margin: 0;
+}
+
+.container {
+      max-width: 800px;
+}
+
+.article-card {
+    margin-bottom: 1.5rem;
+    padding: 1em;
+}
+
+.card-text small {
+    color: #666; 
+}
+
+.badge {
+    padding: 0.5em 1.5em;
+}

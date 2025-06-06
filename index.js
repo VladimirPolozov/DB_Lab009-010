@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const app = express();
 const Article = require('./models/Article');
 
+app.use(express.static('public'));
+
 app.set('view engine', 'ejs');
 
 mongoose.connect('mongodb://localhost:27017/scientificJournal', {
