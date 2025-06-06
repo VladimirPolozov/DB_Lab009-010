@@ -45,8 +45,16 @@
   <div class="container mt-5">
     <h2 class="mb-4 fw-bold">Список статей</h2>
 
+    <form action="/articles" method="GET" class="mb-4">
+        <div class="input-group">
+            <% const currentSearch = typeof searchQuery !== 'undefined' ? searchQuery : '' %>
+            <input type="text" name="search" class="form-control" placeholder="Название статьи" value="<%= currentSearch %>">
+            <button class="btn btn-primary" type="submit">Поиск</button>
+        </div>
+    </form>
+
     <% if (articles.length === 0) { %>
-      <p class="text-muted">Статей пока нет.</p>
+      <p class="text-muted">По данному запросу не найдено ни одной статьи</p>
     <% } else { %>
       <% articles.forEach((article, index) => { %>
         <div class="card article-card shadow-sm">

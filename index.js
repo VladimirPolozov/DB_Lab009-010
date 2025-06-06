@@ -15,9 +15,17 @@ app.get('/', (req, res) => {
 });
 
 app.get('/articles', async (req, res) => {
+  let query = {};
+  const searchQuery = req.query.search || '';
+
+  if (searchQuery.trim() !== '') {
+    const regex = new RegExp(searchQuery.trim(), 'i');
+    query.title = regex;
+  }
+
   try {
-    const articles = await Article.find();
-    res.render('articles', { articles });
+    const articles = await Article.find(query);
+    res.render('articles', { articles, searchQuery: searchQuery });
   } catch (err) {
     res.status(500).send(err);
   }
