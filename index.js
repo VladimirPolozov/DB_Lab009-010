@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const app = express;
+const app = express();
 const Article = require('./models/Article');
 
 app.set('view engine', 'ejs');
