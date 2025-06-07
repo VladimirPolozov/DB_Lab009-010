@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= article.title %></title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Научный Журнал</a>
+      <a class="btn btn-outline-light ms-auto" href="/articles">← Назад</a>
+    </div>
+  </nav>
+
+  <div class="container mt-5 pt-4">
+    <h2 class="mb-3 fw-bold"><%= article.title %></h2>
+
+    <p>
+      <strong>Авторы:</strong> <%= article.authors.join(', ') %><br/>
+      <strong>Дата публикации:</strong> <%= article.datePublished.toISOString().split('T')[0] %>
+    </p>
+
+    <hr />
+
+    <div class="mb-4">
+      <%= article.content %>
+    </div>
+
+    <hr />
+
+    <h4 class="mb-3">Теги</h4>
+    <% if (article.tags.length === 0) { %>
+      <p class="text-muted">Нет тегов</p>
+    <% } else { %>
+      <div>
+        <% article.tags.forEach(tag => { %>
+          <span class="badge bg-secondary me-1"><%= tag %></span>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <hr />
+
+    <h4 class="mb-3">Рецензии</h4>
+    <% if (article.reviews && article.reviews.length > 0) { %>
+      <ul class="list-group mb-4">
+        <% article.reviews.forEach(review => { %>
+          <li class="list-group-item">
+            <strong><%= review.author %></strong> (оценка: <%= review.rating %>/10)<br/>
+            <%= review.text %>
+          </li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <p class="text-muted">Пока нет рецензий.</p>
+    <% } %>
+
+    <a href="/articles" class="btn btn-outline-primary">← Назад к списку</a>
+  </div>
+</body>
+</html>

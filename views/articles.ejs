@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Список статей</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> 
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Научный Журнал</a>
+            <div class="ms-auto d-flex gap-2">
+            <a class="btn btn-outline-light" href="/articles">Список статей</a>
+            <a class="btn btn-success" href="/articles/new">Добавить статью</a>
+            </div>
+        </div>
+    </nav>
+
+  <div class="container mt-5">
+    <h2 class="mb-4 fw-bold">Список статей</h2>
+
+    <form action="/articles" method="GET" class="mb-4 d-flex gap-2 flex-column">
+        <div class="d-flex gap-2 flex-row">
+            <!-- Поиск по названию -->
+            <div class="input-group">
+                <% const currentSearch = typeof searchQuery !== 'undefined' ? searchQuery : '' %>
+                <input type="text" name="search" class="form-control" placeholder="Название статьи" value="<%= currentSearch %>">
+            </div>
+
+            <!-- Выбор автора -->
+            <div class="input-group">
+                <select name="author" class="form-select">
+                <option value="">Все авторы</option>
+                <% allAuthors.forEach(author => {   %>
+                    <option value="<%= author %>" <%= (author === authorQuery) ? 'selected' : '' %>><%= author %></option>
+                <% }) %>
+                </select>
+            </div>
+        </div>
+        <div class="d-flex gap-2 flex-row">
+            <div class="d-flex gap-2 flex-row">
+                <!-- Фильтр по дате: от -->
+                <div class="input-group">
+                    <span class="input-group-text">От</span>
+                    <input type="date" name="dateFrom" class="form-control" value="<%= typeof dateFrom !== 'undefined' ? dateFrom : '' %>">
+                </div>
+
+                <!-- Фильтр по дате: до -->
+                <div class="input-group">
+                    <span class="input-group-text">До</span>
+                    <input type="date" name="dateTo" class="form-control" value="<%= typeof dateTo !== 'undefined' ? dateTo : '' %>">
+                </div>
+            </div>
+        
+            <div class="input-group">
+                <button class="input-group btn btn-primary" type="submit">Применить фильтр</button>
+            </div>
+        </div>
+    </form>
+
+    <% if (articles.length === 0) { %>
+      <p class="text-muted">По данному запросу не найдено ни одной статьи</p>
+    <% } else { %>
+      <% articles.forEach((article, index) => { %>
+        <div class="card article-card shadow-sm mb-4 p-2">
+            <div class="card-body">
+                <h5 class="card-title fw-bold mb-3"><%= index + 1 %>. <%= article.title %></h5>
+                <div class="card-subtitle mb-2">
+                <b>Авторы:</b> <%= article.authors.join(', ') %><br/>
+                <b>Дата публикации:</b> <%= article.datePublished.toISOString().split('T')[0] %>
+            </div>
+            <div class="mb-4">
+              <% article.tags.forEach(tag => { %>
+                <span class="badge bg-primary me-1"><%= tag %></span>
+              <% }) %>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center bg-transparent border-0 p-0">
+                <form action="/articles/<%= article._id %>?_method=DELETE" method="POST">
+                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Удалить" onclick="return confirm('Вы уверены?')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+                <a href="/articles/<%= article._id %>" class="btn btn-sm btn-outline-primary">Подробнее</a>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+</body>
+</html>
